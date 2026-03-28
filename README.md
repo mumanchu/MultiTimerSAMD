@@ -24,33 +24,34 @@ This library was orginally developed as part of a non-blocking Stepper Motor Lib
 
 ### Table of contents
 
-- [Supported boards](#supported-boards)
+- [Supported Boards](#supported-boards)
 - [Do you really need a hardware interrupt?](#really-need-interrupt)
 - [What is a 'Timer/Counter' (TC) and a 'Timer/Counter for Control' (TCC)?](#what-is-tc-tcc)
-- [Using the library](#using-the-library)
-- [Example sketch](#example-sketch)
+- [Using the Library](#using-the-library)
+- [Example Sketch](#example-sketch)
 - [The `#include` files](#include-files)
 - [Using `#defines` to control code generation](#using-defines)
 - [The `#define` symbols](#the-define-symbols)
 - [Library API (Application Programming Interface)](#library-api)
-- [Debugging features](#debugging-features)
+- [Debugging Features](#debugging-features)
 - [A simple scheduler which doesn't need a timer interrupt](#simple-scheduler)
 - [A simple switch debouncer which doesn't need a timer interrupt](#simple-debouncer)
-- [Technical notes (wear your Anorak)](#technical-notes)
+- [Technical Notes (wear your Anorak)](#technical-notes)
 	- [Interrupt handler (ISR) restrictions and best practices](#interrupt-restrictions)
 	- [How to determine which timers are already used](#which-timers-are-used)
 	- [Code in the SAMD's `delay.c`](#delay-dot-c)
 	- [Pointers](#pointers)
-- [Reference documents](#reference-documents)
-- [New universal libraries for SAMD21/51, STM32, ESP32 and AVR processors](#coming-soon)
-- [Matt's blog](#matts-blog)
+- [Reference Documents](#reference-documents)
+- [New libraries for SAMD21/51, STM32, ESP32 and AVR processors](#coming-soon)
+- [Matt's Blog](#matts-blog)
 - [License and Disclaimer](#license-and-disclaimer)
+- [Revision History](#revision-history)
 <br/>
 
 
 <a name="supported-boards"></a>
 
-## Supported boards
+## Supported Boards
 
 The library has been tested on these boards, but it should work with all SAMD21/51 boards that use the Arduino SAMD boards package.\
 Note that the SAMD21's have no FPU (no floating point support in hardware).
@@ -101,7 +102,7 @@ Which one you choose depends on which TCs or TCCs are used by other features. Se
 
 <a name="using-the-library"></a>
 
-## Using the library
+## Using the Library
 
 The library may not be visible in the online Arduino IDE Library Manager, but you can install it from the github ZIP file using the Arduino IDE, then open the example sketch.
 
@@ -128,7 +129,7 @@ TC5 is used by the Arduino `tone()` function, so do not use TC5 if you use `tone
 
 <a name="example-sketch"></a>
 
-## Example sketch
+## Example Sketch
 
 The example sketch `MultiTimerSAMDExample1.ino` should run on all SAMD21 or SAMD51 boards. The relevant code is selected by the `#ifdef _SAMD21_` and `#ifdef _SAMD51_` statements.
 
@@ -316,7 +317,6 @@ void loop()
 </details>
 
 
-
 <a name="include-files"></a>
 
 ### The `#include` files
@@ -482,11 +482,10 @@ if (!timer0.beginChannel(1, 2000, timer0Channel1Callback)) {
 ```
 
 **`void enable();`**\
-Enables and starts the timer. Interrupts will begin.
-TODO does the timer start for the beginning or continue from where it was?
+Enables and starts the timer. Interrupts will begin. Always call this after `begin()`, otherwise the timer will remained stopped. If `disable()` was used, the timer will continue from where it was disabled.
 
 **`void disable();`**\
-Disables the timer. Interrupts will be paused.
+Disables (stops) the timer. Interrupts will be paused.
 
 **`bool interruptPending(uint channel = 0);`**\
 Call this to see if another interrupt has occurred for this timer and the given channel. This means your interrupt handler is taking too long! The default channel (if not supplied) is CH0.
@@ -495,7 +494,7 @@ Call this to see if another interrupt has occurred for this timer and the given 
 
 <a name="debugging-features"></a>
 
-## Debugging features
+## Debugging Features
 
 Debugging without a hardware debugger is very difficult. You can only use `Serial.print()`. To help out, all the $${\color{green}mumanchu}$$ libraries use `ASSERT()` and `LOGERROR()` macros. 
 
@@ -721,7 +720,7 @@ bool Debouncer2::stateChanged(bool currentState, bool* debouncedState)
 
 <a name="technical-notes"></a>
 
-## Technical notes (put on your Anorak before reading)
+## Technical Notes (put on your Anorak before reading)
 
 Joke of the week: "The IDE's of March"
 
@@ -763,7 +762,7 @@ loop()
 	interrupts();
 	
 	// now use the snapshot value
-	if (temp == 1) { }
+	if (temp != 0) { }
 }
 ```
 
@@ -981,21 +980,23 @@ The Visual Micro extension can be installed from MSVC (Extensions / Manage Exten
 
 <a name="coming-soon"></a>
 
-## New libraries for SAMD21/51, STM32, ESP32 and AVR processors **_Coming Soon!_**
+## New libraries for SAMD21/51, STM32, ESP32 and AVR processors
 
-Now that I've got the hang of this github business, I'll release some more libraries soon...
+**_Coming Soon!_**
+
+Now that I've got the hang of this github business, I'll be releasing some more libraries...
 
 - MultiTimer Libraries for STM32, ESP32 and AVR processors
 - Stepper Motor Control Library
 - TMC2209 Motor Controller Library
 - Universal Fast Digital IO Library
 - AS3935 Lightning Sensor Library (with desktop app)
-- and many more!
+- and there are many more...
 
 
 <a name="matts-blog"></a>
 
-## Matt's blog
+## Matt's Blog
 
 You can find more software and examples here...\
 [https://muman.ch/muman/index.htm?muman-matts-blog.htm](https://muman.ch/muman/index.htm?muman-matts-blog.htm)
@@ -1011,11 +1012,11 @@ If you use this code, please acknowledge the author. Don't forget, according to 
 <br/>
 
 
-### The Additional $${\color{limegreen}mumanchu}$$ Disclaimer :grinning:
+## The Additional $${\color{limegreen}mumanchu}$$ Disclaimer :grinning:
 
-This so-called software* is used entirely at your own risk. Neither the authors nor the distributors will accept any responsibility or liability for any physical or mental damage, injuries or deaths, of any persons, pets or relatives, living or already dead, or for any loss or accumulation of data, or any other possible effect that may, or may not, result from the use, non-use, misuse or abuse of this software.
+This so-called _software_* is used entirely at your own risk. Neither the authors nor the distributors will accept any responsibility or liability for any physical or mental damage, injuries or deaths, of any persons, pets or relatives, living or already dead, or for any loss or accumulation of data, or any other possible effect that may, or may not, result from the use, non-use, misuse or abuse of this software.
 
-ALL material (including this Disclaimer) is supplied "AS IS" without warranty of quality or accuracy of ANY KIND. (But we use it a lot and it seems OK to us.)
+ALL material, including this Disclaimer, is supplied "AS IS" without warranty of quality or accuracy of ANY KIND. (But we use it a lot and it seems OK to us.)
 
 Links to third-party sites do not constitute sponsorship, endorsement or approval of these sites or the contents of these sites.
 
@@ -1028,4 +1029,15 @@ _\* This software is subject to change without noticing._
 
 > [!TIP]
 > If you do find any problems, or have any (polite) suggestions, invitations to wild parties, lucrative business proposals, etc, please send an email to `info@muman.ch` and we'll see what we can do.
+
+
+<a name="revision-history"></a>
+
+## Revision History
+
+| Date       | Version  | Description |
+|:---------- |:---------|:----------- |
+| 2026.03.28 | 0.0.0	| Initial version, not yet submitted to Arduino |
+
+
 
