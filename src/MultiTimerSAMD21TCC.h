@@ -3,10 +3,10 @@
 // SAMD21 Hardware Timer Interrupt Library for TCCx Timer Counter for Control
 // Copyright (C) muman.ch, 2026.03.15
 // All rights reversed
-// https://github.com/mumanch/MultiTimerSAMD
+// https://github.com/mumanchu/MultiTimerSAMD
 
 #include <Arduino.h>
-#include "MattLabsLibDebug.h"
+#include "MumanchuDebug.h"
 
 #ifdef _SAMD21_
 

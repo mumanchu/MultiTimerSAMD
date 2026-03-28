@@ -3,9 +3,9 @@
 
 # Multichannel Timer Interrupt Library for SAMD21 and SAMD51 processors
 
-Here is yet another timer interrupt library for SAMD21 and SAMD51 processors. But this $${\color{limegreen}mumanchu}$$ library is unique in that it can use one or more Timer/Counters (TC or TCC), and can use the timer's "channels" (CH0..CH5) to produce multiple interrupts at different frequencies, each calling a different interrupt handler (ISR).
+Here is yet another timer interrupt library for SAMD21 and SAMD51 processors. But this $${\color{green}mumanchu}$$ library is unique in that it can use one or more Timer/Counters (TC or TCC), and can use the timer's "channels" (CH0..CH5) to produce multiple interrupts at different frequencies, each calling a different interrupt handler (ISR).
 
-This library was orginally developed as part of a non-blocking Stepper Motor Library, which controls up to 4 motors using S-Curve acceleration/deceleration curves (library to be released soon). The Stepper Motor library has timer support for almost all microcontrollers/MCUs, via a cross-platform timer class with a common API (Application Program Interface). A universal timer library for other MCUs will be released soon too.
+This library was orginally developed as part of a non-blocking Stepper Motor Library, which controls up to 4 motors using S-Curve acceleration/deceleration curves (this library to be released soon). The Stepper Motor library has timer support for almost all common microcontrollers/MCUs, via a cross-platform timer class with a common API (Application Programming Interface). A universal timer library for other MCUs will be released soon too.
 
 
 > [!NOTE]
@@ -142,7 +142,7 @@ The example sketch `MultiTimerSAMDExample1.ino` should run on all SAMD21 or SAMD
 // SAMD MultiTimer Library Example Sketch
 // MultiTimerSAMDExample1.ino
 // Copyright (C) 2026, muman.ch
-// email: info@muman.ch
+// https://github.com/mumanchu/MultiTimerSAMD
 /*
 This example uses two timers, TC3 and TCC2.
 By default, timer channel 0 (CH0) is used to generate an interrupt.
@@ -497,7 +497,7 @@ Call this to see if another interrupt has occurred for this timer and the given 
 
 ## Debugging features
 
-Debugging without a hardware debugger is very difficult. You can only use `Serial.print()`. To help out, all the $${\color{limegreen}mumanchu}$$ libraries use `ASSERT()` and `LOGERROR()` macros. 
+Debugging without a hardware debugger is very difficult. You can only use `Serial.print()`. To help out, all the $${\color{green}mumanchu}$$ libraries use `ASSERT()` and `LOGERROR()` macros. 
 
 If `DEBUG` is defined, these macros will output error messages to the `Serial` channel. If `DEBUG` is not defined, no code is generated and they will do nothing.
 
@@ -505,7 +505,7 @@ If `DEBUG` is defined, these macros will output error messages to the `Serial` c
 
 `LOGERROR()` displays a message along with the source file name and line number where the error occurred. You might use this at the end of a `switch()` statement if the value can't be processed.
 
-These macros are not defined in the library itself because they are used by all the $${\color{limegreen}mumanchu}$$ libraries. They reside in a common include file called `MumanchuDebug.h`. They share a common function called `LogError()`, which is usually defined in the main `.ino` file. 
+These macros are not defined in the library itself because they are used by all the $${\color{green}mumanchu}$$ libraries. They reside in a common include file called `MumanchuDebug.h`. They share a common function called `LogError()`, which is usually defined in the main `.ino` file. 
 
 Almost all library methods return `true` or `false` to indicate success or failure. It is important to always check the return values of the `begin()` methods. After debugging, the return values of other methods can be ignored unless it is something that could fail, like a communications request.
 
@@ -744,7 +744,7 @@ Therefore, the worst-case ISR time often depends on the communications overhead,
 > You can solve communications problems by reducing the priority of the timer interrupts so communications interrupts are handled first. See the commented out `//NVIC_SetPriority(irqn, 0); // advanced: set the interrupt priority (default = 0)` lines in the source code. But this means that your timer interrupt may be delayed by the communications, damn!
 
 
-If you have an oscilloscope, you can measure the ISR time by toggling an output at the start and end of the handler - but bear in mind that `digitalWrite()` itself can take many microseconds (depending on the speed of your MCU). Using the $${\color{limegreen}mumanchu}$$ "Fast Digital IO Library" (coming soon) will help you here. 
+If you have an oscilloscope, you can measure the ISR time by toggling an output at the start and end of the handler - but bear in mind that `digitalWrite()` itself can take many microseconds (depending on the speed of your MCU). Using the $${\color{green}mumanchu}$$ "Fast Digital IO Library" (coming soon) will help you here. 
 
 Global variables that are referenced by an interrupt handler should be declared as `volatile` to disable the optimizer so they are not cached in a CPU register.
 
@@ -893,7 +893,7 @@ unsigned long micros( void ) { ... }
 ### Pointers, `&` and `*`
 
 <details>
-<summary>This library uses pointers. Click to expand the text if you want to learn about pointers.</summary>
+<summary>This library uses pointers. Click to expand the text if you are a beginner and want to learn about pointers.</summary>
 
 ###  
 
@@ -923,7 +923,7 @@ Before you can access the data it points to, `void` pointers must know the data 
 
 Pointers can even point to nothing. A `NULL` pointer, with the value 0, is an unassigned pointer. If you try to access what it points to, your program will crash! NULL pointers are one of the major causes of serious and hard-to-find bugs, so they must be avoided at all costs! It's a good idea to use `ASSERT(pointer != NULL)` wherever there may be a NULL pointer. And ALWAYS validate the pointers returned by `malloc()` (or don't use it at all, see below). 
 
-We can also have _pointers-to-pointers_. `int** pp` is a _pointer-to-a-pointer-to_ an `int`. Or you might have an array of pointers to functions which return pointers to structures containing pointers to...  but we won't go there.
+We can also have _pointers-to-pointers_. `int** pp` is a _pointer-to-a-pointer-to_ an `int`. Or you might have a pointer to an array of pointers to functions which return pointers to structures containing pointers to...  but we won't go there.
  
 ```cpp
 int i = 0; 
@@ -947,9 +947,9 @@ In embedded programs it can be a bad idea to use `malloc()` and `free()` because
 
 For the same reason, avoid using `String` and use character arrays instead, `char buf[10];` or `const char* s = "hello";` etc. Using `const` means the text is stored in flash memory, not RAM.
 
-I have had problems with fragmentation and running out of heap memory in the past - the program will hang or crash with a `NULL` reference, and without a debugger you will have no idea what happened. It is much more efficient (and much safer) to use static data, data in a class that's constructed at startup, or data that's initialised during `setup()` with the usual `begin()` call. 
+I have had nasty problems with fragmentation and running out of heap memory in the past - the program will hang or crash with a `NULL` reference, and without a debugger you will have no idea what happened. It is much more efficient (and much safer) to use static data, data in a class that's constructed at startup, or data that's initialised during `setup()` with the usual `begin()` call where you can check the return value. 
 
-Sometimes you _must_ use `malloc()`, because the amount of data you need may not be known at build time. In this case, use `malloc()` in the `begin()` method, _never_ in the constructor (where handling fatal errors is difficult), and always check the return value for `NULL` (not enough RAM), so you can handle the fatal error instead of crashing.
+Sometimes you _must_ use `malloc()`, because the amount of data you need may not be known at build time. In this case, use `malloc()` in the `begin()` method, _never_ in the constructor (where handling fatal errors is very difficult), and always check the return value for `NULL` (not enough RAM), so you can handle the fatal error instead of crashing.
 </details>
 
 
@@ -981,7 +981,7 @@ The Visual Micro extension can be installed from MSVC (Extensions / Manage Exten
 
 <a name="coming-soon"></a>
 
-## New universal libraries for SAMD21/51, STM32, ESP32 and AVR processors **_Coming Soon!_**
+## New libraries for SAMD21/51, STM32, ESP32 and AVR processors **_Coming Soon!_**
 
 Now that I've got the hang of this github business, I'll release some more libraries soon...
 

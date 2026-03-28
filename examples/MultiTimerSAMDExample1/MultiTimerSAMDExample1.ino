@@ -2,7 +2,6 @@
 // SAMD MultiTimer Library Example Sketch
 // MultiTimerSAMDExample1.ino
 // Copyright (C) 2026.03.27, muman.ch
-// email: info@muman.ch
 // https://github.com/mumanchu/MultiTimerSAMD
 /*
 This example uses two timers, TC3 and TCC2.
@@ -85,6 +84,7 @@ void timerCallback2() { ++counter2; }
 void timerCallback3() { ++counter3; }
 
 
+// Called at startup, before loop() begins
 void setup()
 {
 	Serial.begin(115200);
@@ -129,9 +129,8 @@ void setup()
 	timerTCC2.enable();
 }
 
-#include "printUsedTimers.h"
 
-// For flashing the LED
+// For flashing the LED in loop()
 bool ledState = true;
 
 void loop()
