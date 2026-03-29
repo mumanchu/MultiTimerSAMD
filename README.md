@@ -5,11 +5,11 @@
 
 Here is yet another timer interrupt library for SAMD21 and SAMD51 processors. But this $${\color{green}mumanchu}$$ library is unique in that it can use one or more Timer/Counters (TC or TCC), and can use the timer's "channels" (CH0..CH5) to produce multiple interrupts at different frequencies, each calling a different interrupt handler (ISR).
 
-This library was orginally developed as part of a non-blocking Stepper Motor Library, which controls up to 4 motors using S-Curve acceleration/deceleration curves (this library to be released soon). The Stepper Motor library has timer support for almost all common microcontrollers/MCUs, via a cross-platform timer class with a common API (Application Programming Interface). A universal timer library for other MCUs will be released soon too.
+This library was orginally developed as part of a non-blocking Stepper Motor Library, which controls up to 4 motors using S-Curve acceleration/deceleration curves (this library will be released soon). The Stepper Motor library has timer support for almost all common microcontrollers/MCUs, via a cross-platform timer class with a common API (Application Programming Interface). A universal timer library for other MCUs will be released soon too.
 
 
 > [!NOTE]
-> This is my first adventure with Arduino libraries and github. I think this README text is too long. It's aimed at beginners or intermediate makers, which is why it contains so many details. Maybe I'll move most of it to the muman.ch website.
+> This is my first Arduino Library and my first github project. I think this README text is too long. It's aimed at beginners or intermediate makers, which is why it contains so many details. Maybe I'll move most of it to the muman.ch website. I also wanted to use MattLabs (which I have used for my project, just for fun), but someone else has already used it. So now it's $${\color{green}mumanchu}$$, which comes from the name of my old `muman.ch` website. 
 
 
 ### Advantages of this library
@@ -17,7 +17,7 @@ This library was orginally developed as part of a non-blocking Stepper Motor Lib
 - Uses one or more 'Timer/Counters' (TC0..TC7) or 'Timer/Counters for Control' (TCC0..TCC4). The number of available timer/counters depends on the processor type. But normally you'll only need one.
 - Uses a timer's _channels_ (CH0..CH5) to generate multiple interrupts at different frequencies from a single timer, depending on the number of channels the timer has.
 - Easy to implement, with just a single `#include` file.
-- Very small code size. Only generates code if it's actually needed. Uses `#define` statements to define the code to be generated.
+- Very small code size. Only generates code if it's actually needed. Uses `#define` statements to define the code to be generated for a specific timer.
 - Optional `DEBUG` mode which adds additional validation and writes error messages to `Serial` to help with implementation and debugging. The debug code can be excluded from the release version once it's been tested.
 - Unique `PrintUsedTimers()` function so you can see which timers are already used by existing code and other libraries.
 
@@ -29,9 +29,9 @@ This library was orginally developed as part of a non-blocking Stepper Motor Lib
 - [What is a 'Timer/Counter' (TC) and a 'Timer/Counter for Control' (TCC)?](#what-is-tc-tcc)
 - [Using the Library](#using-the-library)
 - [Example Sketch](#example-sketch)
-- [The `#include` files](#include-files)
+- [The `#include` Files](#include-files)
 - [Using `#defines` to control code generation](#using-defines)
-- [The `#define` symbols](#the-define-symbols)
+- [The `#define` Symbols](#the-define-symbols)
 - [Library API (Application Programming Interface)](#library-api)
 - [Debugging Features](#debugging-features)
 - [A simple scheduler which doesn't need a timer interrupt](#simple-scheduler)
@@ -92,7 +92,9 @@ Very often an interrupt handler will just read or write a digital pin or two, wh
 
 SAMDs contain two types of timer/counters, TC and TCC. 
 
-TC is a "general-purpose Timer/Counter", configurable as 8, 16 or 24 bits. This library always runs TCs as 16-bit timers. TCC is a "Timer/Counter for Control" with many additional features for waveform generation, frequency generation and pulse width modulation. You can read all about the complexities of Timers and Counters in the [Data Sheets](#reference-documents).
+TC is a "general-purpose Timer/Counter", configurable as 8, 16 or 24 bits. This library always runs TCs as 16-bit timers. 
+
+TCC is a "Timer/Counter for Control" with many additional features for waveform generation, frequency generation and pulse width modulation. You can read all about the complexities of Timers and Counters in the [Data Sheets](#reference-documents).
 
 For our purposes, you can use either a TC or a TCC to generate timer interrupts. `#include` the include file according to the timer/counter type (and the SAMD type) you want to use, i.e. `MultiTimerSAMD21TC.h` or `MultiTimerSAMD21TCC.h`, or both.
 
@@ -319,7 +321,7 @@ void loop()
 
 <a name="include-files"></a>
 
-### The `#include` files
+### The `#include` Files
 
 The MultiTimer include files contain the class definitions AND code, so they can only be included in **ONE** file in your sketch (.ino or .cpp), else you will get 'multidefined' errors. It is good practice to keep the code for a particular feature in just one file, either your main `.ino` file or a separate `Timers.cpp` file (for example). If you do this then you do not need separate `.h` and `.cpp` files. You can use inheritance or encapsulation to extend the features.
 
@@ -361,7 +363,7 @@ If the timer does not exist (not all SAMD devices have all the timers), then you
 
 <a name="the-define-symbols"></a>
 
-### The `#define` symbols
+### The `#define` Symbols
 ```
 #if defined(_SAMD21_)
 
@@ -465,7 +467,7 @@ MultiTimerSAMD21TC timer1(TCC1);
 The initializer. Call this in `setup()`. It initializes the timer channel 0 (MC0) for the given frequency, and supplies the callback function. It returns `false` if something fails, and a error message is output on `Serial`. See [Debug features](#debug-features) below.
 ```cpp
 if (!timer0.begin(1000, timer0Channel0Callback) {
-	// error handling
+	// fatal error
 }
 ```
 
@@ -567,7 +569,7 @@ If you don't need precise timing, then a simple `loop()` scheduler using `millis
 
 Because interrupts are not used, this has the _huge advantage_ that there are no restrictions on what can be done in the scheduler handlers. The only restriction is that the combined worst-case processing time of all the handlers should not be longer than the shortest scheduler period.
 
-A simple scheduler like this is fine for many applications. I have used this simple pattern in many projects, combining it with an interrupt handler or two. There's often no need for a fancy and complicated "real time operating system".
+A simple scheduler like this is fine for many applications. I have used this simple pattern in many projects, combining it with an interrupt handler or two. There's often no need for a fancy and complicated "real time operating system". This does the same thing.
 
 ```cpp
 // Simple Scheduler
@@ -729,11 +731,11 @@ Joke of the week: "The IDE's of March"
 
 ### Interrupt handler (ISR) restrictions and best practices
 
-_Interrupts are disabled during an interrupt service routine (ISR)._ This means that any functions that use interrupts themselves _will not work_. In particular, you must _not_ call any communications functions, `Serial`, `Wire`, `SPI`, WiFi, Bluetooth, etc. Calling any of these will usually hang your program. Remember that a timer inetrrupt can occur at _any point_ in your program.
+_Interrupts are disabled during an interrupt service routine (ISR)._ This means that any functions which use interrupts themselves _will not work_. In particular, you must _not_ call any communications functions, `Serial`, `Wire`, `SPI`, WiFi, Bluetooth, etc. Calling any of these will usually hang your program. Remember that a timer interrupt can occur at _any point_ in your program.
 
 Despite what many say, with the SAMD devices you _can_ use `millis()` and `micros()` in an ISR because these are 'interrupt compatible'. See [Technical notes](#technical-notes) for details.
 
-You can also use `delayMicroseconds()` because this is just a small software loop. `delay()` will also work, but delaying for milliseconds in an IST is a _not_ a good idea.
+You can also use `delayMicroseconds()` because this is just a small software loop. `delay()` will also work, but delaying for milliseconds in an ISR is a _not_ a good idea.
 
 Interrupt handlers must be as fast as possible, using the smallest possible code. They should not contain any significant loops or delays. For example, if an ISR is called every 100 milliseconds and it takes 50 milliseconds to process (way too long), then it's using 50% of the processing time! Disabling interrupts for 50ms would also cause received serial data to be lost (buffer overruns), and may cause transmission errors too if the receiver is time-dependent. 
 
@@ -1012,7 +1014,7 @@ If you use this code, please acknowledge the author. Don't forget, according to 
 <br/>
 
 
-## The Additional $${\color{limegreen}mumanchu}$$ Disclaimer :grinning:
+## The Additional $${\color{green}mumanchu}$$ Disclaimer :grinning:
 
 This so-called _software_* is used entirely at your own risk. Neither the authors nor the distributors will accept any responsibility or liability for any physical or mental damage, injuries or deaths, of any persons, pets or relatives, living or already dead, or for any loss or accumulation of data, or any other possible effect that may, or may not, result from the use, non-use, misuse or abuse of this software.
 
