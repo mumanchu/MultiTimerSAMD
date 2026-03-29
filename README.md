@@ -82,7 +82,7 @@ The code in an interrupt handler has many limitations, see [Interrupt Handler Re
 
 This timer library was developed to provide STEP pulses to a stepper motor controller. For this application, a timer generates regular interrupts at (say) 25kHz, and the interrupt handler decides whether it is time to toggle a motor's STEP pin or not, according to the acceleration/deceleration curves. This means the motor control is _completely independent_ of the main program, being controlled only by the interrupt handler. The main program just polls to find out if the motor movement has been completed before setting up and starting the next movement.
 
-Very often an interrupt handler will just read or write a digital pin or two, which is always fast and safe (and for that you may need the "Universal Fast Digital IO Library" - coming soon :-)
+Very often an interrupt handler will just read or write a digital pin or two, which is always fast and safe (and for that you may need the $${\color{green}mumanchu}$$ "Universal Fast Digital IO Library" - coming soon :-)
 
 
 <a name="what-is-tc-tcc"></a>
@@ -344,9 +344,9 @@ MultiTimerSAMD51TCC.h
 
 `#define` is a _preprocessor directive_. It is processed by the compiler before it compiles the code. The MultiTimer library uses `#define` to create symbols that define which timers and channels will be used, and to control the code that is generated. It does not generate any code that is not needed.
 
-The main reason for this is because of the way the system's interrupt handlers (ISRs) are used. The interrupt handlers have fixed names, like `TC3_Handler`. So if a function called `TC3_Handler` exists, then it is this function that is called for the timer TC3 interrupt. This function is not be created if the timer is not used, so you must tell the compiler that this function should be created. That's where the `#defines` come in. 
+The main reason for this is because of the way the system's interrupt handlers (ISRs) are declared. The interrupt handlers have fixed names, like `TC3_Handler`. So if a function called `TC3_Handler` exists, then it is this function that is called for the timer TC3 interrupt. This function is not be created if the timer is not used, so you must tell the compiler that this function should be created. That's where the `#defines` come in. 
 
-Each timer, and each of the timer's channels, has an associated symbol which must be defined in order to use that timer and channel. If it's not defined then you will get an error, either at build time or at run time.
+Each timer, and each of the timer's channels, has an associated symbol which must be defined so the library uses that timer and channel. If it's not defined then you will get an error, either at build time or at run time.
 
 For example, define `USING_TIMER_SAMD21_TC3` to use timer/counter TC3 channel 0. This also creates the code and interrupt handler for the timer/counter. If you also want to use channel 1 of that timer/counter, then also define `USING_TIMER_SAMD21_TC3_CH1`.
 
@@ -354,7 +354,7 @@ Define the symbols immediately before the `#include` statement, as shown in the 
 
 ***Only define the symbols for the timers and channels that you need!***
 
-If the timer does not exist (not all SAMD devices have all the timers), then you will get a compiler error or `begin()` will fail whih a `LOGERROR()` message that tells you what's wrong.
+If the timer does not exist (not all SAMD devices have all the timers), then you will get a compiler error or `begin()` will fail whith a `LOGERROR()` message that tells you what's wrong.
 
 <details>
 <summary>Click to expand the list of symbols that can be defined</summary>
@@ -1029,7 +1029,7 @@ _\* This software is subject to change without noticing._
 <br/>
 
 > [!TIP]
-> If you do find any problems, or have any (polite) suggestions, invitations to wild parties, lucrative business proposals, etc, please send an email to `info@muman.ch` and we'll see what we can do.
+> If you do find any problems or have any (polite) suggestions for improvements, please send an email to `info@muman.ch` and we'll see what we can do.
 
 
 <a name="revision-history"></a>
@@ -1038,7 +1038,7 @@ _\* This software is subject to change without noticing._
 
 | Date       | Version  | Description |
 |:---------- |:---------|:----------- |
-| 2026.03.28 | 0.0.0	| Initial version, not yet submitted to Arduino |
+| 2026.03.29 | 1.0.0	| The first version! |
 
 
 
