@@ -77,7 +77,7 @@ MultiTimerSAMD51TCC timerTCC2(TCC2);
 
 // Timer callback functions
 // these just count the interrupts so you know its working
-uint counter0 = 0, counter1 = 0, counter2 = 0, counter3 = 0;
+volatile uint counter0 = 0, counter1 = 0, counter2 = 0, counter3 = 0;
 void timerCallback0() { ++counter0; }
 void timerCallback1() { ++counter1; }
 void timerCallback2() { ++counter2; }
