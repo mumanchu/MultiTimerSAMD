@@ -9,7 +9,7 @@ This library was orginally developed as part of a non-blocking Stepper Motor Lib
 
 
 > [!NOTE]
-> This is my first Arduino Library and my first github project. I think this README text is too long. It's aimed at beginners or intermediate makers, which is why it contains so many details. Maybe I'll move most of it to the muman.ch website. I also wanted to use MattLabs (which I have used for my project, just for fun), but someone else has already used it. So now it's $${\color{green}mumanchu}$$, which comes from the name of my old `muman.ch` website. 
+> This is my first Arduino Library and my first github project. I think this README text is too long. It's aimed at beginners or intermediate makers, which is why it contains so many details. Maybe I'll move most of it to the muman.ch website. I also wanted to use MattLabs (which I have used for my projects, just for fun), but someone else has already used it. So now it's $${\color{green}mumanchu}$$, which comes from the name of my old `muman.ch` website. 
 
 
 ### Advantages of this library
@@ -53,8 +53,7 @@ This library was orginally developed as part of a non-blocking Stepper Motor Lib
 
 ## Supported Boards
 
-The library has been tested on these boards, but it should work with all SAMD21/51 boards that use the Arduino SAMD boards package.\
-Note that the SAMD21's have no FPU (no floating point support in hardware).
+The library has been tested on these boards, but it should work with all SAMD21/51 boards that use the Arduino SAMD boards package. Note that the SAMD21's have no FPU (no floating point support in hardware).
 
 **Arduino Zero (ATSAMD21G18A)**\
 This 48MHz/256KB/32KB board has excellent debugging features with its built-in EDBG debugger. 
@@ -108,7 +107,7 @@ Which one you choose depends on which TCs or TCCs are used by other features. Se
 
 The library may not be visible in the online Arduino IDE Library Manager, but you can install it from the github ZIP file using the Arduino IDE, then open the example sketch.
 
-1. Download the ZIP file from https://github.com/mumanch/MultiTimerSAMD with "\<\> Code / Download ZIP".
+1. Download the ZIP file from https://github.com/mumanchu/MultiTimerSAMD with "\<\> Code / Download ZIP".
 
 2. Open the Arduino IDE. Use "Sketch / Include Library > Add ZIP Library..." and choose the ZIP file you just downloaded, `MultiTimerSAMD-main.zip`. This installs the MultiTimerSAMD library in the folder 'C:\Users\<user-name>\Documents\Arduino\libraries\MultiTimerSAMD', and it can now be used from the Arduino IDE. (You may not see it in the Arduino Library Manager.)
 
