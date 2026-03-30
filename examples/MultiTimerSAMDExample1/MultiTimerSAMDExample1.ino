@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////
 // SAMD MultiTimer Library Example Sketch
 // MultiTimerSAMDExample1.ino
-// Copyright (C) 2026.03.27, muman.ch
+// muman.ch, 2026.03.27
 // https://github.com/mumanchu/MultiTimerSAMD
 /*
 This example uses two timers, TC3 and TCC2.

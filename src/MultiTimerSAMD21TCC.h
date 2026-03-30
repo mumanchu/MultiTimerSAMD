@@ -1,8 +1,7 @@
 #pragma once
 
 // SAMD21 Hardware Timer Interrupt Library for TCCx Timer Counter for Control
-// Copyright (C) muman.ch, 2026.03.15
-// All rights reversed
+// muman.ch, 2026.03.15
 // https://github.com/mumanchu/MultiTimerSAMD
 
 #include <Arduino.h>

@@ -143,7 +143,7 @@ The example sketch `MultiTimerSAMDExample1.ino` should run on all SAMD21 or SAMD
 /////////////////////////////////////////////////////////
 // SAMD MultiTimer Library Example Sketch
 // MultiTimerSAMDExample1.ino
-// Copyright (C) 2026, muman.ch
+// muman.ch, 2026
 // https://github.com/mumanchu/MultiTimerSAMD
 /*
 This example uses two timers, TC3 and TCC2.
@@ -463,7 +463,7 @@ MultiTimerSAMD21TC timer1(TCC1);
 ```
 
 **`bool begin(float frequency, void (*timerCallback)());`**\
-The initializer. Call this in `setup()`. It initializes the timer channel 0 (MC0) for the given frequency, and supplies the callback function. It returns `false` if something fails, and a error message is output on `Serial`. See [Debug features](#debug-features) below.
+The initializer. Call this in `setup()`. It initializes the timer channel 0 (MC0) for the given frequency, and supplies the callback function. It returns `false` if something fails, and a error message is output on `Serial`. See [Debug Features](#debug-features) below.
 ```cpp
 if (!timer0.begin(1000, timer0Channel0Callback) {
 	// fatal error
@@ -471,7 +471,7 @@ if (!timer0.begin(1000, timer0Channel0Callback) {
 ```
 
 **`bool beginChannel(uint channel, float frequency, void (*timerCallback)());`**\
-It you want to use the timer's additional channels, use the CHx `#defines`, then call this from `setup()` for each channel, after calling `begin()`. It returns 'false' if something's wrong.
+It you want to use the timer's additional channels, use the CHx `#defines`, then call this from `setup()` for each channel, after calling `begin()`. It returns `false` if something's wrong.
 
 ```cpp
 if (!timer0.begin(1000, timer0Channel0Callback) {
@@ -519,7 +519,7 @@ The `MumanchuDebug.h` file
 ////////////////////////////////////////////////////////////////
 // MumanchuDebug.h
 // Macro definitions for debugging and logging
-// Copyright (C) 2026, muman.ch
+// muman.ch, 2026
 
 // Comment this out for Release mode
 #define DEBUG
@@ -723,7 +723,7 @@ bool Debouncer2::stateChanged(bool currentState, bool* debouncedState)
 
 ## Technical Notes (put on your Anorak before reading)
 
-Joke of the week: "The IDE's of March"
+_Joke of the week: "The IDE's of March"_
 
 
 <a name="interrupt-restrictions"></a>
@@ -732,7 +732,7 @@ Joke of the week: "The IDE's of March"
 
 _Interrupts are disabled during an interrupt service routine (ISR)._ This means that any functions which use interrupts themselves _will not work_. In particular, you must _not_ call any communications functions, `Serial`, `Wire`, `SPI`, WiFi, Bluetooth, etc. Calling any of these will usually hang your program. Remember that a timer interrupt can occur at _any point_ in your program.
 
-Despite what many say, with the SAMD devices you _can_ use `millis()` and `micros()` in an ISR because these are 'interrupt compatible'. See [Technical notes](#technical-notes) for details.
+Despite what many say, with the SAMD devices you _can_ use `millis()` and `micros()` in an ISR because these are 'interrupt compatible'. See [Code in SAMD's `delay.c`](#delay-dot-c).
 
 You can also use `delayMicroseconds()` because this is just a small software loop. `delay()` will also work, but delaying for milliseconds in an ISR is a _not_ a good idea.
 
@@ -741,10 +741,10 @@ Interrupt handlers must be as fast as possible, using the smallest possible code
 Therefore, the worst-case ISR time often depends on the communications overhead, taking into account the size of the receive buffers and the data rates.
 
 > [!TIP]
-> You can solve communications problems by reducing the priority of the timer interrupts so communications interrupts are handled first. See the commented out `//NVIC_SetPriority(irqn, 0); // advanced: set the interrupt priority (default = 0)` lines in the source code. But this means that your timer interrupt may be delayed by the communications, damn!
+> You can sometimes solve communications problems by reducing the priority of the timer interrupts so communications interrupts are handled first. See the commented out `//NVIC_SetPriority(irqn, 0); // advanced: set the interrupt priority (default = 0)` lines in the source code. But this means that your timer interrupt may be delayed by the communications, damn!
 
 
-If you have an oscilloscope, you can measure the ISR time by toggling an output at the start and end of the handler - but bear in mind that `digitalWrite()` itself can take many microseconds (depending on the speed of your MCU). Using the $${\color{green}mumanchu}$$ "Fast Digital IO Library" (coming soon) will help you here. 
+If you have an oscilloscope, you can measure the ISR time by toggling an output at the start and end of the handler - but bear in mind that `digitalWrite()` itself can take many microseconds (depending on the speed of your MCU). Using the $${\color{green}mumanchu}$$ "Optimized GPIO Library" (coming soon) will help you here. 
 
 Global variables that are referenced by an interrupt handler should be declared as `volatile` to disable the optimizer so they are not cached in a CPU register.
 
@@ -776,7 +776,7 @@ I looked very hard, but nobody who has written a timer interrupt library has des
 
 But maybe there is a way...
 
-The file 'cortex_handlers.c' contains the default timer interrupt handler definitions. The fixed-name handlers are defined like this:
+The file `cortex_handlers.c` contains the default timer interrupt handler definitions. The fixed-name handlers are defined like this:
 ```cpp
 void TCC0_Handler     (void) __attribute__ ((weak, alias("Dummy_Handler")));
 ```
@@ -786,7 +786,7 @@ But if `TCC0_Handler` has been defined elsewhere, it will override the `weak` al
 
 So if a handler does not have the same address as `Dummy_Handler`, then you can assume the timer has been used because somebody has defined the interrupt handler.
 
-The code to do this is below. Before you start using the MultiTimerSAMD library, you can call this from your sketch and use it to display a list of the timers used by the current program. The library has this code in `PrintUsedTimers.h`.
+The code to do this is in `PrintUsedTimers.h`, and is reproduced below. Call `printUsedTimers(Serial)` from your sketch to display a list of the timers used by the current program.
 
 <details>
 <summary>Click to expand the code</summary>
@@ -962,7 +962,7 @@ Sometimes you _must_ use `malloc()`, because the amount of data you need may not
 ## Reference documents
 
 **SAMD21 Data Sheet**\
-[SAM-D21-DA1-Family-Data-Sheet-DS40001882.pdf](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D21-DA1-Family-Data-Sheet-DS40001882.pdf)
+[SAM-D21-DA1-Family-Data-Sheet-DS40001882.pdf](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D21-DA1-Family-Data-Sheet-DS40001882.pdf)\
 [Alternative](https://content.arduino.cc/assets/mkr-microchip_samd21_family_full_datasheet-ds40001882d.pdf)
 
 **SAMD51 Data Sheet**\
@@ -990,7 +990,7 @@ Now that I've got the hang of this github business, I'll be releasing some more 
 - MultiTimer Libraries for STM32, ESP32 and AVR processors
 - Stepper Motor Control Library
 - TMC2209 Motor Controller Library
-- Universal Fast Digital IO Library
+- Optimized Digital IO Library, for SAMD, STM32, ESP32 and AVR processors 
 - AS3935 Lightning Sensor Library (with desktop app)
 - and there are many more...
 
@@ -1009,7 +1009,11 @@ You can find more software and examples here...\
 
 Released under the BSD license, see [LICENSE](LICENSE). Or should I use the MIT license? Or the GNU? I don't know.
 
-If you use this code, please acknowledge the author. Don't forget, according to Dante Alighieri (Dante's Inferno), plagiarism is one of the deadly sins and you'll end up in hell (Eighth circle, Bolgia 10).
+And how does putting "Copyright (C)" in the source code affect this? Everybody seems to do it. I think I'll remove that from all my source code.
+
+Just for fun, I sometimes write "All rights reversed" instead of "All rights reserved". The legal team will have fun with that one.
+
+If you do re-publish this "code", please acknowledge the author. Don't forget, according to Dante Alighieri (Dante's Inferno), plagiarism is one of the deadly sins and you'll end up in hell (Eighth circle, Bolgia 10).
 <br/>
 
 

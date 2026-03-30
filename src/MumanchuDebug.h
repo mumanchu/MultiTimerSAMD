@@ -3,8 +3,7 @@
 ////////////////////////////////////////////////////////////////
 // MumanchuDebug.h
 // Macro definitions for debugging and logging
-// Copyright (C) 2026, muman.ch
-// All rights reversed
+// muman.ch, 2026
 // https://github.com/mumanchu/
 
 // Comment this out for Release mode
