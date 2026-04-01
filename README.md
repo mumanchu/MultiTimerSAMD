@@ -22,7 +22,7 @@ This library was orginally developed as part of a non-blocking Stepper Motor Lib
 - Unique `PrintUsedTimers()` function so you can see which timers are already used by existing code and other libraries.
 
 
-### Table of contents
+### Table of Contents
 
 - [Supported Boards](#supported-boards)
 - [Do you really need a hardware interrupt?](#really-need-interrupt)
@@ -31,7 +31,6 @@ This library was orginally developed as part of a non-blocking Stepper Motor Lib
 - [Example Sketch](#example-sketch)
 - [The `#include` Files](#include-files)
 - [Using `#defines` to control code generation](#using-defines)
-- [The `#define` Symbols](#the-define-symbols)
 - [Library API (Application Programming Interface)](#library-api)
 - [Debugging Features](#debugging-features)
 - [A simple scheduler which doesn't need a timer interrupt](#simple-scheduler)
@@ -117,7 +116,7 @@ The library may not be visible in the online Arduino IDE Library Manager, but yo
 
 5. Start the "Tools / Serial Monitor" and set the baudate to '115200'. 
 
-6. Press the -> button to build and upload the example sketch. 
+6. Press the `->` button to build and upload the example sketch. 
 
 7. In the Serial Monitor, you should see the four timer interrupt frequencies displayed every second. 
 
@@ -566,7 +565,7 @@ void LogError(const char* msg, const char* filePath, uint line)
 
 If you don't need precise timing, then a simple `loop()` scheduler using `millis()` for the timing will be sufficient. Many of the Arduino timer libraries do it this way. 
 
-Because interrupts are not used, this has the _huge advantage_ that there are no restrictions on what can be done in the scheduler handlers. The only restriction is that the combined worst-case processing time of all the handlers should not be longer than the shortest scheduler period.
+Because interrupts are not used, this has the _huge advantage_ that there are no restrictions on what can be done in the scheduler handlers. The only restriction is that the combined worst-case processing time of all the handlers should not exceed the shortest scheduler period.
 
 A simple scheduler like this is fine for many applications. I have used this simple pattern in many projects, combining it with an interrupt handler or two. There's often no need for a fancy and complicated "real time operating system". This does the same thing.
 
@@ -622,6 +621,9 @@ Note: On some architectures `millis()` and `micros()` should be avoided in inter
 However, with the SAMD Arduino platform you _can_ call these functions in an interrupt handler because they are 'interrupt safe'. See [Technical Notes](#technical-notes) below. 
 
 Here's a simple debouncer which can be used either from an input interrupt handler or from a polled input. Just create a `Debouncer2` object for each input to be debounced, supplying the number of microseconds for the debounce timer in the constructor or with `begin()`. Call `stateChanged()` regularly from `loop()` or the interrupt handler, supplying it with the latest input state. `stateChanged()` returns `true` if the debounced state has changed, and the current state is returned in `*debouncedState`.
+
+> [!NOTE]
+> Take care if you are using an interrupt for the switch input. The interrupt only occurs when the state changes, so the interrupt is _not called_ when the state has settled.
 
 <details>
 <summary>Click to expand the debouncer code</summary>
@@ -736,7 +738,7 @@ Despite what many say, with the SAMD devices you _can_ use `millis()` and `micro
 
 You can also use `delayMicroseconds()` because this is just a small software loop. `delay()` will also work, but delaying for milliseconds in an ISR is a _not_ a good idea.
 
-Interrupt handlers must be as fast as possible, using the smallest possible code. They should not contain any significant loops or delays. For example, if an ISR is called every 100 milliseconds and it takes 50 milliseconds to process (way too long), then it's using 50% of the processing time! Disabling interrupts for 50ms would also cause received serial data to be lost (buffer overruns), and may cause transmission errors too if the receiver is time-dependent. 
+Interrupt handlers must be as fast as possible, using the smallest possible code. They should not contain any significant loops or delays. For example, if an ISR is called every 100 milliseconds and it takes 50 milliseconds to process (way too long), then it's using 50% of the processing time! Disabling interrupts for 50ms would also cause received serial data to be lost (buffer overruns), and may cause transmission errors too if the remote receiver is timing-dependent. 
 
 Therefore, the worst-case ISR time often depends on the communications overhead, taking into account the size of the receive buffers and the data rates.
 
@@ -789,7 +791,7 @@ So if a handler does not have the same address as `Dummy_Handler`, then you can 
 The code to do this is in `PrintUsedTimers.h`, and is reproduced below. Call `printUsedTimers(Serial)` from your sketch to display a list of the timers used by the current program.
 
 <details>
-<summary>Click to expand the code</summary>
+<summary>Click to expand the code. This also illustrates how to use MACROs to save typing.</summary>
 
 ### PrintUsedTimers.h
 ```cpp
@@ -893,7 +895,7 @@ unsigned long micros( void ) { ... }
 ### Pointers, `&` and `*`
 
 <details>
-<summary>This library uses pointers. Click to expand the text if you are a beginner and want to learn about pointers.</summary>
+<summary>This library uses pointers. Click to expand the text if you are a fledgling and want to learn about pointers.</summary>
 
 ###  
 
@@ -963,7 +965,7 @@ Sometimes you _must_ use `malloc()`, because the amount of data you need may not
 
 **SAMD21 Data Sheet**\
 [SAM-D21-DA1-Family-Data-Sheet-DS40001882.pdf](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D21-DA1-Family-Data-Sheet-DS40001882.pdf)\
-[Alternative](https://content.arduino.cc/assets/mkr-microchip_samd21_family_full_datasheet-ds40001882d.pdf)
+[Alternative reference on arduino.cc](https://content.arduino.cc/assets/mkr-microchip_samd21_family_full_datasheet-ds40001882d.pdf)
 
 **SAMD51 Data Sheet**\
 [SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf)
@@ -983,7 +985,7 @@ The Visual Micro extension can be installed from MSVC (Extensions / Manage Exten
 
 ## New libraries for SAMD21/51, STM32, ESP32 and AVR processors
 
-**_Coming Soon!_**
+**_Coming ~~Soon~~ Later!_**
 
 Now that I've got the hang of this github business, I'll be releasing some more libraries...
 
@@ -1009,7 +1011,7 @@ You can find more software and examples here...\
 
 Released under the BSD license, see [LICENSE](LICENSE). Or should I use the MIT license? Or the GNU? I don't know.
 
-And how does putting "Copyright (C)" in the source code affect this? Everybody seems to do it. I think I'll remove that from all my source code.
+And how does putting "Copyright (C)" in the source code affect this? Everybody seems to do it. I think I'll remove that from all my source code. I thought the whole idea was that you _can_ copy it, just not say you wrote it.
 
 Just for fun, I sometimes write "All rights reversed" instead of "All rights reserved". The legal team will have fun with that one.
 
@@ -1019,9 +1021,9 @@ If you do re-publish this "code", please acknowledge the author. Don't forget, a
 
 ## The Additional $${\color{green}mumanchu}$$ Disclaimer :grinning:
 
-This so-called _software_* is used entirely at your own risk. Neither the authors nor the distributors will accept any responsibility or liability for any physical or mental damage, injuries or deaths, of any persons, pets or relatives, living or already dead, or for any loss or accumulation of data, or any other possible effect that may, or may not, result from the use, non-use, misuse or abuse of this software.
+This so-called _software_* is used entirely at your own risk. Neither the authors nor the distributors will accept any responsibility or liability for any physical or mental damage, injuries or deaths, of any persons, pets or relatives, living or already dead, or for any loss or accumulation of data, or any other possible effect that may, or may not, result from the use, non-use, misuse or abuse of this software. (But we use it a lot and it seems OK to us.)
 
-ALL material, including this Disclaimer, is supplied "AS IS" without warranty of quality or accuracy of ANY KIND. (But we use it a lot and it seems OK to us.)
+ALL material, including this Disclaimer, is supplied "AS IS" without warranty of quality or accuracy of ANY KIND.
 
 Links to third-party sites do not constitute sponsorship, endorsement or approval of these sites or the contents of these sites.
 
