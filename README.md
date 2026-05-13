@@ -934,7 +934,7 @@ int** pp = &p; 		// pp is the address of p, so pp points to p which points to i
 **pp = 123;			// the sets the-contents-of-the-contents-of pp to 123, so i = 123
 ```
 
-`&` can also mean _reference to_ (if it's on the left-hand side of the assignment or is a function parameter). A reference is really a hidden pointer, except you don't need to mess about with `*` and `&`. Unlike pointers, references can only be assigned at runtime.
+`&` can also mean _reference to_ (if it's on the left-hand side of the assignment or is a function parameter definition). A reference is really a hidden pointer, except you don't need to mess about with `*` and `&`. Unlike pointers, references can only be assigned at runtime.
 
 ```cpp
 int i = 0;
