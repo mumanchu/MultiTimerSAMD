@@ -725,9 +725,6 @@ bool Debouncer2::stateChanged(bool currentState, bool* debouncedState)
 
 ## Technical Notes (put on your Anorak before reading)
 
-_Joke of the week: "The IDE's of March"_
-
-
 <a name="interrupt-restrictions"></a>
 
 ### Interrupt handler (ISR) restrictions and best practices
@@ -1045,6 +1042,10 @@ _\* This software is subject to change without noticing._
 | Date       | Version  | Description |
 |:---------- |:---------|:----------- |
 | 2026.03.29 | 1.0.0	| The first version! |
+| 2026.03.30 | 1.0.1    | Change author from muman.ch to mumanchu |
+<br/>
 
+## Joke of the Week
 
+"The IDEs of March"
 
