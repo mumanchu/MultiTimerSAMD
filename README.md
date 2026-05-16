@@ -542,7 +542,7 @@ Put this code at the start of the main `.ino` file. It contains the shared `LogE
 
 #ifdef DEBUG
 // if using a debugger, disable all GCC compiler optimisations
-#pragma GCC optimize ("-O0")
+//#pragma GCC optimize ("-O0")
 
 // Shared error logging function
 void LogError(const char* msg, const char* filePath, uint line)
